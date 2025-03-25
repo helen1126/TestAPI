@@ -1,24 +1,23 @@
-# coding=gbk
 import requests
 import time
 import json
 import logging
 
-# ÅäÖÃÈÕÖ¾
+# é…ç½®æ—¥å¿—
 logging.basicConfig(filename='api_test.log', level=logging.INFO,
                     format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
-# ¶¨Òå API URL£¬Ç¶Èë°æ±¾ºÅ
+# å®šä¹‰ API URL
 API_URL = "http://localhost:5000/api/v2/dynamic_weights"
 
 
 def test_dynamic_weights_api():
-    # Õı³£³¡¾°²âÊÔ
+    # æ­£å¸¸åœºæ™¯æµ‹è¯•
     def test_normal_scenarios():
-        # ¶àÊôĞÔ×éºÏ
+        # å¤šå±æ€§ç»„åˆ
         payload = {
             "model_version": "v2.1",
-            "prompt": "Èü²©Åó¿Ë+Ò¹¾°",
+            "prompt": "èµ›åšæœ‹å…‹+å¤œæ™¯",
             "temperature": 0.7,
             "weights": [0.2, 0.8],
             "debug_mode": True
@@ -35,10 +34,10 @@ def test_dynamic_weights_api():
             result = "Fail"
         logging.info(f"Test: test_normal_scenarios, Latency: {latency}ms, Result: {result}")
 
-    # Òì³£³¡¾°²âÊÔ
+    # å¼‚å¸¸åœºæ™¯æµ‹è¯•
     def test_exception_scenarios():
-        # JSON ¸ñÊ½´íÎó
-        bad_json = '{"model_version": "v2.1", "prompt": "Èü²©Åó¿Ë+Ò¹¾°", "temperature": 0.7,}'
+        # JSON æ ¼å¼é”™è¯¯
+        bad_json = '{"model_version": "v2.1", "prompt": "èµ›åšæœ‹å…‹+å¤œæ™¯", "temperature": 0.7,}'
         start_time = time.time()
         response = requests.post(API_URL, data=bad_json)
         end_time = time.time()
@@ -48,11 +47,11 @@ def test_dynamic_weights_api():
             result = "Pass"
         except AssertionError:
             result = "Fail"
-        logging.info(f"Test: JSON ¸ñÊ½´íÎó, Latency: {latency}ms, Result: {result}")
+        logging.info(f"Test: JSON æ ¼å¼é”™è¯¯, Latency: {latency}ms, Result: {result}")
 
-        # È±Ê§±ØÌî×Ö¶Î
+        # ç¼ºå¤±å¿…å¡«å­—æ®µ
         payload = {
-            "prompt": "Èü²©Åó¿Ë+Ò¹¾°",
+            "prompt": "èµ›åšæœ‹å…‹+å¤œæ™¯",
             "temperature": 0.7
         }
         start_time = time.time()
@@ -64,12 +63,12 @@ def test_dynamic_weights_api():
             result = "Pass"
         except AssertionError:
             result = "Fail"
-        logging.info(f"Test: È±Ê§±ØÌî×Ö¶Î, Latency: {latency}ms, Result: {result}")
+        logging.info(f"Test: ç¼ºå¤±å¿…å¡«å­—æ®µ, Latency: {latency}ms, Result: {result}")
 
-        # È¨ÖØ³¬·¶Î§
+        # æƒé‡è¶…èŒƒå›´
         payload = {
             "model_version": "v2.1",
-            "prompt": "Èü²©Åó¿Ë+Ò¹¾°",
+            "prompt": "èµ›åšæœ‹å…‹+å¤œæ™¯",
             "temperature": 0.7,
             "weights": [1.1, -0.1]
         }
@@ -82,14 +81,14 @@ def test_dynamic_weights_api():
             result = "Pass"
         except AssertionError:
             result = "Fail"
-        logging.info(f"Test: È¨ÖØ³¬·¶Î§, Latency: {latency}ms, Result: {result}")
+        logging.info(f"Test: æƒé‡è¶…èŒƒå›´, Latency: {latency}ms, Result: {result}")
 
-    # ±ß½çÖµ²âÊÔ
+    # è¾¹ç•Œå€¼æµ‹è¯•
     def test_boundary_values():
-        # ¿ÕÈ¨ÖØÊı×é
+        # ç©ºæƒé‡æ•°ç»„
         payload = {
             "model_version": "v2.1",
-            "prompt": "Èü²©Åó¿Ë+Ò¹¾°",
+            "prompt": "èµ›åšæœ‹å…‹+å¤œæ™¯",
             "temperature": 0.7,
             "weights": []
         }
@@ -102,13 +101,13 @@ def test_dynamic_weights_api():
             result = "Pass"
         except AssertionError:
             result = "Fail"
-        logging.info(f"Test: ¿ÕÈ¨ÖØÊı×é, Latency: {latency}ms, Result: {result}")
+        logging.info(f"Test: ç©ºæƒé‡æ•°ç»„, Latency: {latency}ms, Result: {result}")
 
-        # ¼«¶ËÎÂ¶È²ÎÊı
+        # æç«¯æ¸©åº¦å‚æ•°
         for temp in [0.1, 2.0]:
             payload = {
                 "model_version": "v2.1",
-                "prompt": "Èü²©Åó¿Ë+Ò¹¾°",
+                "prompt": "èµ›åšæœ‹å…‹+å¤œæ™¯",
                 "temperature": temp
             }
             start_time = time.time()
@@ -120,19 +119,19 @@ def test_dynamic_weights_api():
                 result = "Pass"
             except AssertionError:
                 result = "Fail"
-            logging.info(f"Test: ¼«¶ËÎÂ¶È²ÎÊı T={temp}, Latency: {latency}ms, Result: {result}")
+            logging.info(f"Test: æç«¯æ¸©åº¦å‚æ•° T={temp}, Latency: {latency}ms, Result: {result}")
 
     test_normal_scenarios()
     test_exception_scenarios()
     test_boundary_values()
 
 
-#²âÊÔ°æ±¾·ÏÆú¾¯¸æ
+#æµ‹è¯•ç‰ˆæœ¬åºŸå¼ƒè­¦å‘Š
 def test_version_deprecation():
     start_time = time.time()
     response = requests.post(API_URL, json={
         "model_version": "v1.5",
-        "prompt": "Èü²©Åó¿Ë+Ò¹¾°",
+        "prompt": "èµ›åšæœ‹å…‹+å¤œæ™¯",
         "temperature": 0.7
     })
     end_time = time.time()
@@ -151,7 +150,7 @@ def test_ab_testing():
     start_time = time.time()
     response = requests.post(API_URL, json={
         "model_version": "v2.1",
-        "prompt": "Èü²©Åó¿Ë+Ò¹¾°",
+        "prompt": "èµ›åšæœ‹å…‹+å¤œæ™¯",
         "temperature": 0.7
     })
     end_time = time.time()
