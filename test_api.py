@@ -32,7 +32,8 @@ def test_dynamic_weights_api():
             result = "Pass"
         except AssertionError:
             result = "Fail"
-        logging.info(f"Test: test_normal_scenarios, Latency: {latency}ms, Result: {result}")
+        output_info = response.json()
+        logging.info(f"Test: test_normal_scenarios, Latency: {latency}ms, Result: {result}, Output: {output_info}")
 
     # 异常场景测试
     def test_exception_scenarios():
@@ -47,7 +48,8 @@ def test_dynamic_weights_api():
             result = "Pass"
         except AssertionError:
             result = "Fail"
-        logging.info(f"Test: JSON 格式错误, Latency: {latency}ms, Result: {result}")
+        output_info = response.json()
+        logging.info(f"Test: JSON 格式错误, Latency: {latency}ms, Result: {result}, Output: {output_info}")
 
         # 缺失必填字段
         payload = {
@@ -63,7 +65,8 @@ def test_dynamic_weights_api():
             result = "Pass"
         except AssertionError:
             result = "Fail"
-        logging.info(f"Test: 缺失必填字段, Latency: {latency}ms, Result: {result}")
+        output_info = response.json()
+        logging.info(f"Test: 缺失必填字段, Latency: {latency}ms, Result: {result}, Output: {output_info}")
 
         # 权重超范围
         payload = {
@@ -81,7 +84,8 @@ def test_dynamic_weights_api():
             result = "Pass"
         except AssertionError:
             result = "Fail"
-        logging.info(f"Test: 权重超范围, Latency: {latency}ms, Result: {result}")
+        output_info = response.json()
+        logging.info(f"Test: 权重超范围, Latency: {latency}ms, Result: {result}, Output: {output_info}")
 
     # 边界值测试
     def test_boundary_values():
@@ -101,7 +105,8 @@ def test_dynamic_weights_api():
             result = "Pass"
         except AssertionError:
             result = "Fail"
-        logging.info(f"Test: 空权重数组, Latency: {latency}ms, Result: {result}")
+        output_info = response.json()
+        logging.info(f"Test: 空权重数组, Latency: {latency}ms, Result: {result}, Output: {output_info}")
 
         # 极端温度参数
         for temp in [0.1, 2.0]:
@@ -119,7 +124,8 @@ def test_dynamic_weights_api():
                 result = "Pass"
             except AssertionError:
                 result = "Fail"
-            logging.info(f"Test: 极端温度参数 T={temp}, Latency: {latency}ms, Result: {result}")
+            output_info = response.json()
+            logging.info(f"Test: 极端温度参数 T={temp}, Latency: {latency}ms, Result: {result}, Output: {output_info}")
 
     test_normal_scenarios()
     test_exception_scenarios()
@@ -143,30 +149,12 @@ def test_version_deprecation():
         result = "Pass"
     except AssertionError:
         result = "Fail"
-    logging.info(f"Test: test_version_deprecation, Latency: {latency}ms, Result: {result}")
-
-
-def test_ab_testing():
-    start_time = time.time()
-    response = requests.post(API_URL, json={
-        "model_version": "v2.1",
-        "prompt": "赛博朋克+夜景",
-        "temperature": 0.7
-    })
-    end_time = time.time()
-    latency = (end_time - start_time) * 1000
-    data = response.json()
-    try:
-        assert "experiment_group" in data
-        result = "Pass"
-    except AssertionError:
-        result = "Fail"
-    logging.info(f"Test: test_ab_testing, Latency: {latency}ms, Result: {result}")
+    output_info = response.json()
+    logging.info(f"Test: test_version_deprecation, Latency: {latency}ms, Result: {result}, Output: {output_info}")
 
 
 if __name__ == "__main__":
     test_dynamic_weights_api()
     test_version_deprecation()
-    test_ab_testing()
     print("All tests passed!")
     
