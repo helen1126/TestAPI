@@ -30,6 +30,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test api
       run: |
-        pip install flask torch torchvision openai openai-clip numpy 
+        pip install flask torch torchvision openai openai-clip numpy requests
         python api.py
         python test_api.py
