@@ -3,7 +3,6 @@ channels:
   - defaults
   - Pytorch
 dependencies:
-  - python=3.10.16=h4607a30_1
   - pip:
       - aiohappyeyeballs==2.6.1
       - aiohttp==3.11.14
