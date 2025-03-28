@@ -1,236 +1,324 @@
 {
-    "examples": [
-        {
-            "info": "1.normal scenarios",
-            "input_data": {
-                "base_prompt": "未来主义城市景观",
-                "attributes": [
-                  {
-                    "name": "风格",
-                    "type": "text",
-                    "value": "赛博朋克",
-                    "initial_weight": 0.7,
-                    "constraints": {
-                      "min_weight": 0.4,
-                      "max_weight": 0.9,
-                      "conflict_terms": ["蒸汽朋克", "极简主义"]
-                    }
-                  },
-                  {
-                    "name": "光照",
-                    "type": "text",
-                    "value": "霓虹灯光",
-                    "initial_weight": 0.5,
-                    "constraints": {
-                      "min_weight": 0.2,
-                      "max_weight": 0.8
-                    }
-                  }
-                ],
-                "temperature": 1.8,
-                "fallback_strategy": "creative",
-                "debug_mode": true
-              }              
-        },
-        {
-            "info": "3.missing prompt",
-            "input_data": {
-                "attributes": [
-                  {
-                    "name": "风格",
-                    "type": "text",
-                    "value": "赛博朋克",
-                    "initial_weight": 0.7,
-                    "constraints": {
-                      "min_weight": 0.4,
-                      "max_weight": 0.9,
-                      "conflict_terms": ["蒸汽朋克", "极简主义"]
-                    }
-                  },
-                  {
-                    "name": "光照",
-                    "type": "text",
-                    "value": "霓虹灯光",
-                    "initial_weight": 0.5,
-                    "constraints": {
-                      "min_weight": 0.2,
-                      "max_weight": 0.8
-                    }
-                  }
-                ],
-                "temperature": 1.8,
-                "fallback_strategy": "creative",
-                "debug_mode": true
-              }              
-        },
-        {
-            "info": "4.missing attributes",
-            "input_data": {
-                "base_prompt": "未来主义城市景观",
-                "temperature": 1.8,
-                "fallback_strategy": "creative",
-                "debug_mode": true
-              }              
-        },
-        {
-            "info": "6.extreme temperature 0.1",
-            "input_data": {
-                "base_prompt": "未来主义城市景观",
-                "attributes": [
-                  {
-                    "name": "风格",
-                    "type": "text",
-                    "value": "赛博朋克",
-                    "initial_weight": 0.7,
-                    "constraints": {
-                      "min_weight": 0.4,
-                      "max_weight": 0.9,
-                      "conflict_terms": ["蒸汽朋克", "极简主义"]
-                    }
-                  },
-                  {
-                    "name": "光照",
-                    "type": "text",
-                    "value": "霓虹灯光",
-                    "initial_weight": 0.5,
-                    "constraints": {
-                      "min_weight": 0.2,
-                      "max_weight": 0.8
-                    }
-                  }
-                ],
-                "temperature": 0.1,
-                "fallback_strategy": "creative",
-                "debug_mode": true
-              }              
-        },
-        {
-            "info": "7.extreme temperature 2.0",
-            "input_data": {
-                "base_prompt": "未来主义城市景观",
-                "attributes": [
-                  {
-                    "name": "风格",
-                    "type": "text",
-                    "value": "赛博朋克",
-                    "initial_weight": 0.7,
-                    "constraints": {
-                      "min_weight": 0.4,
-                      "max_weight": 0.9,
-                      "conflict_terms": ["蒸汽朋克", "极简主义"]
-                    }
-                  },
-                  {
-                    "name": "光照",
-                    "type": "text",
-                    "value": "霓虹灯光",
-                    "initial_weight": 0.5,
-                    "constraints": {
-                      "min_weight": 0.2,
-                      "max_weight": 0.8
-                    }
-                  }
-                ],
-                "temperature": 2.0,
-                "fallback_strategy": "creative",
-                "debug_mode": true
-              }              
-        },
-        {
-            "info": "8.temperature below range",
-            "input_data": {
-                "base_prompt": "未来主义城市景观",
-                "attributes": [
-                  {
-                    "name": "风格",
-                    "type": "text",
-                    "value": "赛博朋克",
-                    "initial_weight": 0.7,
-                    "constraints": {
-                      "min_weight": 0.4,
-                      "max_weight": 0.9,
-                      "conflict_terms": ["蒸汽朋克", "极简主义"]
-                    }
-                  },
-                  {
-                    "name": "光照",
-                    "type": "text",
-                    "value": "霓虹灯光",
-                    "initial_weight": 0.5,
-                    "constraints": {
-                      "min_weight": 0.2,
-                      "max_weight": 0.8
-                    }
-                  }
-                ],
-                "temperature": 0.0,
-                "fallback_strategy": "creative",
-                "debug_mode": true
-              }              
-        },
-        {
-            "info": "9.temperature above range",
-            "input_data": {
-                "base_prompt": "未来主义城市景观",
-                "attributes": [
-                  {
-                    "name": "风格",
-                    "type": "text",
-                    "value": "赛博朋克",
-                    "initial_weight": 0.7,
-                    "constraints": {
-                      "min_weight": 0.4,
-                      "max_weight": 0.9,
-                      "conflict_terms": ["蒸汽朋克", "极简主义"]
-                    }
-                  },
-                  {
-                    "name": "光照",
-                    "type": "text",
-                    "value": "霓虹灯光",
-                    "initial_weight": 0.5,
-                    "constraints": {
-                      "min_weight": 0.2,
-                      "max_weight": 0.8
-                    }
-                  }
-                ],
-                "temperature": 10.0,
-                "fallback_strategy": "creative",
-                "debug_mode": true
-              }              
-        },
-        {
-          "info": "9.conflict attributes",
-          "input_data": {
-              "base_prompt": "未来主义城市景观",
-              "attributes": [
-                {
-                  "name": "风格",
-                  "type": "text",
-                  "value": "沙漠",
-                  "initial_weight": 0.7,
-                  "constraints": {
-                    "min_weight": 0.4,
-                    "max_weight": 0.9,
-                    "conflict_terms": ["蒸汽朋克", "极简主义"]
-                  }
-                },
-                {
-                  "name": "光照",
-                  "type": "text",
-                  "value": "极光",
-                  "initial_weight": 0.5,
-                  "constraints": {
-                    "min_weight": 0.2,
-                    "max_weight": 0.8
-                  }
-                }
-              ],
-              "temperature": 10.0,
-              "fallback_strategy": "creative",
-              "debug_mode": true
-            }              
+  "examples": [
+    {
+      "info": "1.normal scenarios",
+      "input_data": {
+        "base_prompt": "未来主义城市景观",
+        "attributes": [
+          {
+            "name": "风格",
+            "type": "text",
+            "value": "赛博朋克",
+            "initial_weight": 0.7,
+            "constraints": {
+              "min_weight": 0.4,
+              "max_weight": 0.9,
+              "conflict_terms": [
+                "蒸汽朋克",
+                "极简主义"
+              ]
+            }
+          },
+          {
+            "name": "光照",
+            "type": "text",
+            "value": "霓虹灯光",
+            "initial_weight": 0.5,
+            "constraints": {
+              "min_weight": 0.2,
+              "max_weight": 0.8
+            }
+          }
+        ],
+        "temperature": 1.8,
+        "fallback_strategy": "creative",
+        "debug_mode": true
       }
-    ]
+    },
+    {
+      "info": "2.missing prompt",
+      "input_data": {
+        "attributes": [
+          {
+            "name": "风格",
+            "type": "text",
+            "value": "赛博朋克",
+            "initial_weight": 0.7,
+            "constraints": {
+              "min_weight": 0.4,
+              "max_weight": 0.9,
+              "conflict_terms": [
+                "蒸汽朋克",
+                "极简主义"
+              ]
+            }
+          },
+          {
+            "name": "光照",
+            "type": "text",
+            "value": "霓虹灯光",
+            "initial_weight": 0.5,
+            "constraints": {
+              "min_weight": 0.2,
+              "max_weight": 0.8
+            }
+          }
+        ],
+        "temperature": 1.8,
+        "fallback_strategy": "creative",
+        "debug_mode": true
+      }
+    },
+    {
+      "info": "3.missing attributes",
+      "input_data": {
+        "base_prompt": "未来主义城市景观",
+        "temperature": 1.8,
+        "fallback_strategy": "creative",
+        "debug_mode": true
+      }
+    },
+    {
+      "info": "4.extreme temperature 0.1",
+      "input_data": {
+        "base_prompt": "未来主义城市景观",
+        "attributes": [
+          {
+            "name": "风格",
+            "type": "text",
+            "value": "赛博朋克",
+            "initial_weight": 0.7,
+            "constraints": {
+              "min_weight": 0.4,
+              "max_weight": 0.9,
+              "conflict_terms": [
+                "蒸汽朋克",
+                "极简主义"
+              ]
+            }
+          },
+          {
+            "name": "光照",
+            "type": "text",
+            "value": "霓虹灯光",
+            "initial_weight": 0.5,
+            "constraints": {
+              "min_weight": 0.2,
+              "max_weight": 0.8
+            }
+          }
+        ],
+        "temperature": 0.1,
+        "fallback_strategy": "creative",
+        "debug_mode": true
+      }
+    },
+    {
+      "info": "5.extreme temperature 2.0",
+      "input_data": {
+        "base_prompt": "未来主义城市景观",
+        "attributes": [
+          {
+            "name": "风格",
+            "type": "text",
+            "value": "赛博朋克",
+            "initial_weight": 0.7,
+            "constraints": {
+              "min_weight": 0.4,
+              "max_weight": 0.9,
+              "conflict_terms": [
+                "蒸汽朋克",
+                "极简主义"
+              ]
+            }
+          },
+          {
+            "name": "光照",
+            "type": "text",
+            "value": "霓虹灯光",
+            "initial_weight": 0.5,
+            "constraints": {
+              "min_weight": 0.2,
+              "max_weight": 0.8
+            }
+          }
+        ],
+        "temperature": 2.0,
+        "fallback_strategy": "creative",
+        "debug_mode": true
+      }
+    },
+    {
+      "info": "6.temperature below range",
+      "input_data": {
+        "base_prompt": "未来主义城市景观",
+        "attributes": [
+          {
+            "name": "风格",
+            "type": "text",
+            "value": "赛博朋克",
+            "initial_weight": 0.7,
+            "constraints": {
+              "min_weight": 0.4,
+              "max_weight": 0.9,
+              "conflict_terms": [
+                "蒸汽朋克",
+                "极简主义"
+              ]
+            }
+          },
+          {
+            "name": "光照",
+            "type": "text",
+            "value": "霓虹灯光",
+            "initial_weight": 0.5,
+            "constraints": {
+              "min_weight": 0.2,
+              "max_weight": 0.8
+            }
+          }
+        ],
+        "temperature": 0.0,
+        "fallback_strategy": "creative",
+        "debug_mode": true
+      }
+    },
+    {
+      "info": "7.temperature above range",
+      "input_data": {
+        "base_prompt": "未来主义城市景观",
+        "attributes": [
+          {
+            "name": "风格",
+            "type": "text",
+            "value": "赛博朋克",
+            "initial_weight": 0.7,
+            "constraints": {
+              "min_weight": 0.4,
+              "max_weight": 0.9,
+              "conflict_terms": [
+                "蒸汽朋克",
+                "极简主义"
+              ]
+            }
+          },
+          {
+            "name": "光照",
+            "type": "text",
+            "value": "霓虹灯光",
+            "initial_weight": 0.5,
+            "constraints": {
+              "min_weight": 0.2,
+              "max_weight": 0.8
+            }
+          }
+        ],
+        "temperature": 10.0,
+        "fallback_strategy": "creative",
+        "debug_mode": true
+      }
+    },
+    {
+      "info": "8.conflict attributes",
+      "input_data": {
+        "base_prompt": "未来主义城市景观",
+        "attributes": [
+          {
+            "name": "风格",
+            "type": "text",
+            "value": "沙漠",
+            "initial_weight": 0.7,
+            "constraints": {
+              "min_weight": 0.4,
+              "max_weight": 0.9,
+              "conflict_terms": [
+                "蒸汽朋克",
+                "极简主义"
+              ]
+            }
+          },
+          {
+            "name": "光照",
+            "type": "text",
+            "value": "极光",
+            "initial_weight": 0.5,
+            "constraints": {
+              "min_weight": 0.2,
+              "max_weight": 0.8
+            }
+          }
+        ],
+        "temperature": 10.0,
+        "fallback_strategy": "creative",
+        "debug_mode": true
+      }
+    },
+    {
+      "info": "9.new attributes",
+      "input_data": {
+        "base_prompt": "黑夜中的远古森林",
+        "attributes": [
+          {
+            "name": "光照",
+            "type": "text",
+            "value": "黑夜",
+            "initial_weight": 0.2,
+            "constraints": {
+              "min_weight": 0.4,
+              "max_weight": 0.9,
+              "conflict_terms": []
+            }
+          },
+          {
+            "name": "场景",
+            "type": "text",
+            "value": "远古森林",
+            "initial_weight": 0.7,
+            "constraints": {
+              "min_weight": 0.2,
+              "max_weight": 0.8
+            }
+          }
+        ],
+        "temperature": 1.8,
+        "fallback_strategy": "creative",
+        "debug_mode": true
+      }
+    },
+    {
+      "info": "11.Out-of-range weights",
+      "input_data": {
+        "base_prompt": "未来主义城市景观",
+        "attributes": [
+          {
+            "name": "风格",
+            "type": "text",
+            "value": "赛博朋克",
+            "initial_weight": 1.3,
+            "constraints": {
+              "min_weight": 0.4,
+              "max_weight": 0.9,
+              "conflict_terms": [
+                "蒸汽朋克",
+                "极简主义"
+              ]
+            }
+          },
+          {
+            "name": "光照",
+            "type": "text",
+            "value": "霓虹灯光",
+            "initial_weight": 0.5,
+            "constraints": {
+              "min_weight": 0.2,
+              "max_weight": 0.8
+            }
+          }
+        ],
+        "temperature": 1.8,
+        "fallback_strategy": "creative",
+        "debug_mode": true
+      }
+    }
+  ]
 }

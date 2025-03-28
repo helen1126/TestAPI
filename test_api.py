@@ -8,6 +8,7 @@ logging.basicConfig(filename='test_api.log', level=logging.INFO,
 
 # 接口的 URL
 url = 'http://127.0.0.1:5000/api/v5/weight/calculate'
+
 # 请求头，包含 Content-Type 和 X-Api-Key
 headers = {
     'Content-Type': 'application/json',
@@ -24,7 +25,6 @@ def run_tests():
         for example in test_data['examples']:
             info = example['info']
             input_data = example['input_data']
-            print(f"开始执行测试用例: {info}")
 
             try:
                 # 发送 POST 请求
@@ -32,14 +32,10 @@ def run_tests():
                 response.raise_for_status()
                 result = response.json()
                 logging.info(f"测试用例 {info} 的响应结果: {response.text}")
-                print(f"测试用例 {info} 的响应结果:")
-                print(json.dumps(result, indent=2))
             except requests.RequestException as e:
                 logging.error(f"测试用例 {info} 发送请求时出错: {e} Output: {response.text}")
-                print(f"测试用例 {info} 发送请求时出错: {e}")
             except json.JSONDecodeError as e:
                 logging.error(f"测试用例 {info} 解析响应 JSON 时出错: {e} Output: {response.text}")
-                print(f"测试用例 {info} 解析响应 JSON 时出错: {e}")
     except FileNotFoundError:
         logging.error("未找到 examples.json 文件，请确保文件存在。")
         print("未找到 examples.json 文件，请确保文件存在。")
