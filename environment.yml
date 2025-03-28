@@ -1,8 +1,10 @@
 name: test_api
 channels:
   - defaults
-  - Pytorch
+  - pytorch
 dependencies:
+  - python = 3.10
+  - pip = 25.0
   - pip:
       - clip==1.0
       - datasets==3.4.1
