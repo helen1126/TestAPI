@@ -3,8 +3,6 @@ channels:
   - defaults
   - Pytorch
 dependencies:
-  - ca-certificates=2025.2.25=haa95532_0
-  - openssl=3.0.16=h3f729d1_0
   - pip=25.0=py310haa95532_0
   - python=3.10.16=h4607a30_1
   - setuptools=75.8.0=py310haa95532_0
