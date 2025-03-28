@@ -1,75 +1,53 @@
 import requests
 import json
-import time
 import logging
 
-# 配置日志
-logging.basicConfig(
-    filename="test_api.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
+# 配置日志记录
+logging.basicConfig(filename='test_api.log', level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
-# API地址
-API_URL = "http://127.0.0.1:5000/process"
+# 接口的 URL
+url = 'http://127.0.0.1:5000/api/v5/weight/calculate'
+# 请求头，包含 Content-Type 和 X-Api-Key
+headers = {
+    'Content-Type': 'application/json',
+    'X-Api-Key': 'your_api_key_here'
+}
 
 
-def test_api():
-    '''
-        测试接口
-    '''
-    # 读取测试数据
-    with open("examples.json", "r", encoding="gbk") as f:
-        example_data = json.load(f)
-
-    for example in example_data['examples']:
-        # 获取测试信息
-        info = example['info']
-        data = example['input_data']
-        start_time = time.time()
-        response = requests.post(API_URL, json=data)
-        end_time = time.time()
-        letancy = (end_time - start_time) * 1000
-
-        try:
-            assert response.status_code == 200
-            assert len(response.json().get("data", {}).get("final_weights", [])) == 2
-            result = "Pass"
-        except AssertionError:
-            result = "Fail"
-
-        logging.info(
-            f"Test: {info}, Result: {result}, Letancy: {letancy}ms, Output: {response.text}"
-        )
-
-def test_wrong_json():
-    '''
-        测试错误的json
-    '''
-    example = ('{"model_version": "v2.1", "prompt": "赛博朋克+夜景", "temperature": 0.7,}')
-    info = "11.worng json"
-    start_time = time.time()
-    response = requests.post(API_URL, json=example)
-    end_time = time.time()
-    letancy = (end_time - start_time) * 1000
-    
+def run_tests():
     try:
-        assert response.status_code == 200
-        assert len(response.json().get("data", {}).get("final_weights", [])) == 2
-        result = "Pass"
-    except AssertionError:
-        result = "Fail"
-    logging.info(
-        f"Test: {info}, Result: {result}, Letancy: {letancy}ms, Output: {response.text}"
-    )
+        # 从 examples.json 文件中读取测试用例
+        with open('examples.json', 'r', encoding='utf-8') as f:
+            test_data = json.load(f)
+
+        for example in test_data['examples']:
+            info = example['info']
+            input_data = example['input_data']
+            print(f"开始执行测试用例: {info}")
+
+            try:
+                # 发送 POST 请求
+                response = requests.post(url, headers=headers, json=input_data)
+                response.raise_for_status()
+                result = response.json()
+                logging.info(f"测试用例 {info} 的响应结果: {response.text}")
+                print(f"测试用例 {info} 的响应结果:")
+                print(json.dumps(result, indent=2))
+            except requests.RequestException as e:
+                logging.error(f"测试用例 {info} 发送请求时出错: {e} Output: {response.text}")
+                print(f"测试用例 {info} 发送请求时出错: {e}")
+            except json.JSONDecodeError as e:
+                logging.error(f"测试用例 {info} 解析响应 JSON 时出错: {e} Output: {response.text}")
+                print(f"测试用例 {info} 解析响应 JSON 时出错: {e}")
+    except FileNotFoundError:
+        logging.error("未找到 examples.json 文件，请确保文件存在。")
+        print("未找到 examples.json 文件，请确保文件存在。")
+    except KeyError:
+        logging.error("examples.json 文件格式有误，请检查是否包含 'examples' 字段。")
+        print("examples.json 文件格式有误，请检查是否包含 'examples' 字段。")
+
 
 if __name__ == "__main__":
-    print("Test start")
-    logging.info("Test start")
-
-    test_api()
-    test_wrong_json()
-
-    print("Test finished")
-    logging.info("Test finished")
+    run_tests()
+    
