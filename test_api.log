@@ -1,0 +1,147 @@
+2025-03-28 20:41:31,368 - INFO - 测试用例 1.normal scenarios 的响应结果: {
+  "code": 200,
+  "data": {
+    "adjustment_log": [
+      "\u521d\u59cb\u6743\u91cd: {'\u8d5b\u535a\u670b\u514b': 0.7, '\u9713\u8679\u706f\u5149': 0.5}"
+    ],
+    "conflict_report": {
+      "detected": false,
+      "potential_conflicts": []
+    },
+    "final_weights": {
+      "\u8d5b\u535a\u670b\u514b": 0.14132758975028992,
+      "\u9713\u8679\u706f\u5149": 0.09712132066488266
+    }
+  },
+  "debug_info": {
+    "gpu_utilization": 0,
+    "model_version": "v2.1",
+    "processing_time_ms": 0
+  }
+}
+
+2025-03-28 20:41:31,372 - ERROR - 测试用例 3.missing prompt 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+  "code": 400,
+  "message": "base_prompt\u548cattributes\u662f\u5fc5\u586b\u53c2\u6570"
+}
+
+2025-03-28 20:41:31,375 - ERROR - 测试用例 4.missing attributes 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+  "code": 400,
+  "message": "base_prompt\u548cattributes\u662f\u5fc5\u586b\u53c2\u6570"
+}
+
+2025-03-28 20:41:31,577 - INFO - 测试用例 6.extreme temperature 0.1 的响应结果: {
+  "code": 200,
+  "data": {
+    "adjustment_log": [
+      "\u521d\u59cb\u6743\u91cd: {'\u8d5b\u535a\u670b\u514b': 0.7, '\u9713\u8679\u706f\u5149': 0.5}"
+    ],
+    "conflict_report": {
+      "detected": false,
+      "potential_conflicts": []
+    },
+    "final_weights": {
+      "\u8d5b\u535a\u670b\u514b": 4.2347540855407715,
+      "\u9713\u8679\u706f\u5149": 2.9101529121398926
+    }
+  },
+  "debug_info": {
+    "gpu_utilization": 0,
+    "model_version": "v2.1",
+    "processing_time_ms": 0
+  }
+}
+
+2025-03-28 20:41:31,770 - INFO - 测试用例 7.extreme temperature 2.0 的响应结果: {
+  "code": 200,
+  "data": {
+    "adjustment_log": [
+      "\u521d\u59cb\u6743\u91cd: {'\u8d5b\u535a\u670b\u514b': 0.7, '\u9713\u8679\u706f\u5149': 0.5}"
+    ],
+    "conflict_report": {
+      "detected": false,
+      "potential_conflicts": []
+    },
+    "final_weights": {
+      "\u8d5b\u535a\u670b\u514b": 0.09473471343517303,
+      "\u9713\u8679\u706f\u5149": 0.06510236859321594
+    }
+  },
+  "debug_info": {
+    "gpu_utilization": 0,
+    "model_version": "v2.1",
+    "processing_time_ms": 0
+  }
+}
+
+2025-03-28 20:41:31,958 - INFO - 测试用例 8.temperature below range 的响应结果: {
+  "code": 200,
+  "data": {
+    "adjustment_log": [
+      "\u521d\u59cb\u6743\u91cd: {'\u8d5b\u535a\u670b\u514b': 0.7, '\u9713\u8679\u706f\u5149': 0.5}"
+    ],
+    "conflict_report": {
+      "detected": false,
+      "potential_conflicts": []
+    },
+    "final_weights": {
+      "\u8d5b\u535a\u670b\u514b": 0.46922415494918823,
+      "\u9713\u8679\u706f\u5149": 0.3224541246891022
+    }
+  },
+  "debug_info": {
+    "gpu_utilization": 0,
+    "model_version": "v2.1",
+    "processing_time_ms": 0
+  }
+}
+
+2025-03-28 20:41:32,155 - INFO - 测试用例 9.temperature above range 的响应结果: {
+  "code": 200,
+  "data": {
+    "adjustment_log": [
+      "\u521d\u59cb\u6743\u91cd: {'\u8d5b\u535a\u670b\u514b': 0.7, '\u9713\u8679\u706f\u5149': 0.5}"
+    ],
+    "conflict_report": {
+      "detected": false,
+      "potential_conflicts": []
+    },
+    "final_weights": {
+      "\u8d5b\u535a\u670b\u514b": 0.46922415494918823,
+      "\u9713\u8679\u706f\u5149": 0.3224541246891022
+    }
+  },
+  "debug_info": {
+    "gpu_utilization": 0,
+    "model_version": "v2.1",
+    "processing_time_ms": 0
+  }
+}
+
+2025-03-28 20:41:32,288 - INFO - 测试用例 9.conflict attributes 的响应结果: {
+  "code": 200,
+  "data": {
+    "adjustment_log": [
+      "\u521d\u59cb\u6743\u91cd: {'\u6c99\u6f20': 0.7, '\u6781\u5149': 0.5}"
+    ],
+    "conflict_report": {
+      "detected": true,
+      "potential_conflicts": [
+        [
+          "\u6c99\u6f20",
+          "\u6781\u5149"
+        ]
+      ]
+    },
+    "final_weights": {
+      "\u6781\u5149": 0.32488909363746643,
+      "\u6c99\u6f20": 0.4692240059375763
+    }
+  },
+  "debug_info": {
+    "gpu_utilization": 0,
+    "model_version": "v2.1",
+    "processing_time_ms": 0
+  }
+}
+
