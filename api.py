@@ -6,8 +6,15 @@ import json
 import time
 import psutil
 from typing import List, Dict, Union
+from flask.json.provider import DefaultJSONProvider
+
+# 自定义 JSON 编码器，禁用 ASCII 转义
+class CustomJSONProvider(DefaultJSONProvider):
+    ensure_ascii = False
 
 app = Flask(__name__)
+# 使用自定义的 JSON 编码器
+app.json = CustomJSONProvider(app)
 
 # 加载CLIP模型
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -42,6 +49,10 @@ def adjust_weights(attributes: List[Dict], temperature: float = 1.2) -> tuple[Di
     alpha = 2.0
     final_weights = {}
     adjustment_log = []
+    # 记录初始权重
+    initial_weight_str = "初始权重: " + "→".join([f"{attr['value']}({attr['initial_weight']})" for attr in attributes])
+    adjustment_log.append(initial_weight_str)
+
     for attr in attributes:
         base_weight = attr['initial_weight']
         # 这里假设用第一个属性的value作为基准计算语义得分，实际应用中可能更复杂
@@ -50,8 +61,8 @@ def adjust_weights(attributes: List[Dict], temperature: float = 1.2) -> tuple[Di
         exponent = torch.tensor(alpha * (semantic_score - temperature), device=device)
         adjusted_weight = base_weight * torch.exp(exponent)
         final_weights[attr['value']] = adjusted_weight.item()
-        adjustment_log.append(
-            f"属性 {attr['value']}: 初始权重 {base_weight}, 语义得分 {semantic_score}, 调整后权重 {adjusted_weight.item()}")
+        # 记录语义强化信息
+        adjustment_log.append(f"语义强化: {attr['value']}+{adjusted_weight.item() - base_weight:.2f}（CLIP相似度{semantic_score:.2f}）")
     return final_weights, adjustment_log
 
 def load_conflicts() -> Dict:
@@ -89,14 +100,39 @@ def validate_request(data):
     :param data: 请求数据
     :return: 验证结果和错误信息
     """
+    if not data:
+        return False, {
+            "code": 40004,
+            "message": "请求体不能为空",
+            "solution": ["确保请求体包含有效的数据"]
+        }
     if 'base_prompt' not in data or 'attributes' not in data:
-        return False, {"code": 400, "message": "base_prompt和attributes是必填参数"}
+        return False, {
+            "code": 400,
+            "message": "base_prompt和attributes是必填参数",
+            "solution": ["在请求体中添加base_prompt和attributes字段"]
+        }
     if not isinstance(data['attributes'], list) or len(data['attributes']) < 2:
-        return False, {"code": 40002, "message": "attributes数组为空，至少提供2个属性对象"}
+        return False, {
+            "code": 40002,
+            "message": "attributes数组为空，至少提供2个属性对象",
+            "solution": ["在attributes数组中添加至少2个属性对象"]
+        }
     for attr in data['attributes']:
         if 'initial_weight' not in attr or not (0.0 <= attr['initial_weight'] <= 1.0):
             attr['initial_weight'] = 0.5
-            return False, {"code": 40003, "message": "initial_weight超出[0.0,1.0]范围，使用0.5作为默认值并重试"}
+            return False, {
+                "code": 40003,
+                "message": "initial_weight超出[0.0,1.0]范围，使用0.5作为默认值并重试",
+                "solution": ["将initial_weight的值设置在[0.0, 1.0]范围内"]
+            }
+        # 新增对type字段的验证
+        if 'type' not in attr or attr['type'] not in ['text', 'image', 'vector']:
+            return False, {
+                "code": 40005,
+                "message": "attribute的type字段必须为text、image或vector",
+                "solution": ["将type字段的值设置为text、image或vector"]
+            }
     return True, None
 
 def handle_conflicts(data, conflicts, fallback_strategy, temperature):
@@ -118,7 +154,11 @@ def handle_conflicts(data, conflicts, fallback_strategy, temperature):
 
     if conflict_detected:
         if fallback_strategy == 'strict':
-            return None, {"code": 42201, "message": "显式冲突（如同时包含\"白天\"和\"夜晚\"）", "solution": ["移除冲突属性或切换降级策略"]}
+            return None, {
+                "code": 42201,
+                "message": "显式冲突（如同时包含\"白天\"和\"夜晚\"）",
+                "solution": ["移除冲突属性或切换降级策略"]
+            }, []
         # 这里简单实现balanced策略，重置为平均权重
         elif fallback_strategy == 'balanced':
             num_attrs = len(data['attributes'])
@@ -131,11 +171,17 @@ def handle_conflicts(data, conflicts, fallback_strategy, temperature):
             final_weights, adjustment_log = adjust_weights(data['attributes'], temperature)
     else:
         final_weights, adjustment_log = adjust_weights(data['attributes'], temperature)
+        # 记录冲突检测信息
+        adjustment_log.append("冲突检测: 无显式冲突")
 
     # 检查权重总和是否超出阈值
     weight_sum = sum(final_weights.values())
     if weight_sum > 1.5:
-        return None, {"code": 42202, "message": "权重总和超出阈值（Σweights>1.5）", "solution": ["降低初始权重或启用自动归一化"]}
+        return None, {
+            "code": 42202,
+            "message": "权重总和超出阈值（Σweights>1.5）",
+            "solution": ["降低初始权重或启用自动归一化"]
+        }, adjustment_log
 
     conflict_report = {
         "detected": conflict_detected,
@@ -149,11 +195,25 @@ def calculate_weights():
     try:
         # 检查请求头
         if 'Content-Type' not in request.headers or request.headers['Content-Type'] != 'application/json':
-            return jsonify({"code": 400, "message": "Content-Type必须为application/json"}), 400
+            return jsonify({
+                "code": 400,
+                "message": "Content-Type必须为application/json",
+                "solution": ["在请求头中添加Content-Type字段并设置值为application/json"]
+            }), 400
         if 'X-Api-Key' not in request.headers:
-            return jsonify({"code": 400, "message": "缺少X-Api-Key"}), 400
+            return jsonify({
+                "code": 400,
+                "message": "缺少X-Api-Key",
+                "solution": ["在请求头中添加X-Api-Key字段并设置有效的值"]
+            }), 400
 
         data = request.get_json()
+        if data is None:
+            return jsonify({
+                "code": 400,
+                "message": "请求体不是有效的JSON格式",
+                "solution": ["检查请求体的JSON格式是否正确"]
+            }), 400
 
         # 验证请求数据
         valid, error = validate_request(data)
@@ -163,7 +223,11 @@ def calculate_weights():
         temperature = data.get('temperature', 1.2)
         if temperature < 0.1 or temperature > 5.0:
             temperature = 1.2
-            return jsonify({"code": 40004, "message": "temperature值超过5.0，降低到≤5.0或使用默认值"}), 400
+            return jsonify({
+                "code": 40004,
+                "message": "temperature值超出范围[0.0,5.0], 调整至范围内或使用默认值",
+                "solution": ["将temperature的值设置在[0.1, 5.0]范围内"]
+            }), 400
 
         fallback_strategy = data.get('fallback_strategy', 'balanced')
         if fallback_strategy not in ['strict', 'balanced', 'creative']:
@@ -187,7 +251,11 @@ def calculate_weights():
             gpu_memory = torch.cuda.memory_allocated()
             gpu_max_memory = torch.cuda.max_memory_allocated()
             if gpu_memory >= gpu_max_memory * 0.9:  # 假设90%为内存不足阈值
-                return jsonify({"code": 50001, "message": "GPU内存不足，减少单次请求属性数量"}), 500
+                return jsonify({
+                    "code": 50001,
+                    "message": "GPU内存不足，减少单次请求属性数量",
+                    "solution": ["减少单次请求中attributes数组的属性数量"]
+                }), 500
             gpu_utilization = psutil.sensors_temperatures()['nvidia_gpu'][0].current
         else:
             gpu_utilization = 0
@@ -208,16 +276,36 @@ def calculate_weights():
             }
         return jsonify(response), 200
     except json.JSONDecodeError:
-        return jsonify({"code": 40001, "message": "JSON格式错误", "solution": ["检查括号闭合或逗号分隔"]}), 400
+        return jsonify({
+            "code": 40001,
+            "message": "JSON格式错误",
+            "solution": ["检查括号闭合或逗号分隔"]
+        }), 400
     except Exception as e:
         print(f"系统级错误: {e}")
         if isinstance(e, torch.cuda.OutOfMemoryError):
-            return jsonify({"code": 50001, "message": "GPU内存不足，减少单次请求属性数量"}), 500
+            return jsonify({
+                "code": 50001,
+                "message": "GPU内存不足，减少单次请求属性数量",
+                "solution": ["减少单次请求中attributes数组的属性数量"]
+            }), 500
         elif isinstance(e, TimeoutError):
-            return jsonify({"code": 50002, "message": "模型加载超时，等待1分钟后重试"}), 500
+            return jsonify({
+                "code": 50002,
+                "message": "模型加载超时，等待1分钟后重试",
+                "solution": ["等待1分钟后重新发起请求"]
+            }), 500
         elif "library not found" in str(e):
-            return jsonify({"code": 50003, "message": "动态库链接失败，检查CUDA版本是否兼容"}), 500
-        return jsonify({"code": 500, "message": "系统级错误，未知原因"}), 500
+            return jsonify({
+                "code": 50003,
+                "message": "动态库链接失败，检查CUDA版本是否兼容",
+                "solution": ["检查CUDA版本是否与当前环境兼容"]
+            }), 500
+        return jsonify({
+            "code": 500,
+            "message": "系统级错误，未知原因",
+            "solution": ["检查服务器日志以获取更多详细信息"]
+        }), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

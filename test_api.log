@@ -1,157 +1,261 @@
-2025-03-28 22:45:39,915 - INFO - 测试用例 1.normal scenarios 的响应结果: {
+2025-03-29 22:36:03,186 - INFO - 测试用例 1.normal scenarios 的响应结果: {
   "code": 200,
   "data": {
     "adjustment_log": [
-      "\u5c5e\u6027 \u8d5b\u535a\u670b\u514b: \u521d\u59cb\u6743\u91cd 0.7, \u8bed\u4e49\u5f97\u5206 1.0000001192092896, \u8c03\u6574\u540e\u6743\u91cd 0.14132758975028992",
-      "\u5c5e\u6027 \u9713\u8679\u706f\u5149: \u521d\u59cb\u6743\u91cd 0.5, \u8bed\u4e49\u5f97\u5206 0.9806764125823975, \u8c03\u6574\u540e\u6743\u91cd 0.09712132066488266"
+      "初始权重: 赛博朋克(0.7)→霓虹灯光(0.5)",
+      "语义强化: 赛博朋克+-0.56（CLIP相似度1.00）",
+      "语义强化: 霓虹灯光+-0.40（CLIP相似度0.98）",
+      "冲突检测: 无显式冲突"
     ],
     "conflict_report": {
       "detected": false,
       "potential_conflicts": []
     },
     "final_weights": {
-      "\u8d5b\u535a\u670b\u514b": 0.14132758975028992,
-      "\u9713\u8679\u706f\u5149": 0.09712132066488266
+      "赛博朋克": 0.14132758975028992,
+      "霓虹灯光": 0.09712132066488266
     }
   },
   "debug_info": {
     "gpu_utilization": 0,
     "model_version": "v2.1",
-    "processing_time_ms": 193
+    "processing_time_ms": 171
   }
 }
 
-2025-03-28 22:45:39,920 - ERROR - 测试用例 2.missing prompt 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:03,188 - ERROR - 测试用例 2.missing prompt 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 400,
-  "message": "base_prompt\u548cattributes\u662f\u5fc5\u586b\u53c2\u6570"
+  "message": "base_prompt和attributes是必填参数",
+  "solution": [
+    "在请求体中添加base_prompt和attributes字段"
+  ]
 }
 
-2025-03-28 22:45:39,922 - ERROR - 测试用例 3.missing attributes 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:03,191 - ERROR - 测试用例 3.missing attributes 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 400,
-  "message": "base_prompt\u548cattributes\u662f\u5fc5\u586b\u53c2\u6570"
+  "message": "base_prompt和attributes是必填参数",
+  "solution": [
+    "在请求体中添加base_prompt和attributes字段"
+  ]
 }
 
-2025-03-28 22:45:40,131 - ERROR - 测试用例 4.extreme temperature 0.1 发送请求时出错: 500 Server Error: INTERNAL SERVER ERROR for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
-  "code": 500,
-  "message": "\u7cfb\u7edf\u7ea7\u9519\u8bef\uff0c\u672a\u77e5\u539f\u56e0"
+2025-03-29 22:36:03,371 - ERROR - 测试用例 4.extreme temperature 0.1 发送请求时出错: 422 Client Error: UNPROCESSABLE ENTITY for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+  "code": 42202,
+  "message": "权重总和超出阈值（Σweights>1.5）",
+  "solution": [
+    "降低初始权重或启用自动归一化"
+  ]
 }
 
-2025-03-28 22:45:40,329 - INFO - 测试用例 5.extreme temperature 2.0 的响应结果: {
+2025-03-29 22:36:03,549 - INFO - 测试用例 5.extreme temperature 5.0 的响应结果: {
   "code": 200,
   "data": {
     "adjustment_log": [
-      "\u5c5e\u6027 \u8d5b\u535a\u670b\u514b: \u521d\u59cb\u6743\u91cd 0.7, \u8bed\u4e49\u5f97\u5206 1.0000001192092896, \u8c03\u6574\u540e\u6743\u91cd 0.09473471343517303",
-      "\u5c5e\u6027 \u9713\u8679\u706f\u5149: \u521d\u59cb\u6743\u91cd 0.5, \u8bed\u4e49\u5f97\u5206 0.9806764125823975, \u8c03\u6574\u540e\u6743\u91cd 0.06510236859321594"
+      "初始权重: 赛博朋克(0.7)→霓虹灯光(0.5)",
+      "语义强化: 赛博朋克+-0.70（CLIP相似度1.00）",
+      "语义强化: 霓虹灯光+-0.50（CLIP相似度0.98）",
+      "冲突检测: 无显式冲突"
     ],
     "conflict_report": {
       "detected": false,
       "potential_conflicts": []
     },
     "final_weights": {
-      "\u8d5b\u535a\u670b\u514b": 0.09473471343517303,
-      "\u9713\u8679\u706f\u5149": 0.06510236859321594
+      "赛博朋克": 0.00023482383403461426,
+      "霓虹灯光": 0.00016137270722538233
     }
   },
   "debug_info": {
     "gpu_utilization": 0,
     "model_version": "v2.1",
-    "processing_time_ms": 194
+    "processing_time_ms": 174
   }
 }
 
-2025-03-28 22:45:40,333 - ERROR - 测试用例 6.temperature below range 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:03,552 - ERROR - 测试用例 6.temperature below range 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 40004,
-  "message": "temperature\u503c\u8d85\u8fc75.0\uff0c\u964d\u4f4e\u5230\u22645.0\u6216\u4f7f\u7528\u9ed8\u8ba4\u503c"
+  "message": "temperature值超出范围[0.0,5.0], 调整至范围内或使用默认值",
+  "solution": [
+    "将temperature的值设置在[0.1, 5.0]范围内"
+  ]
 }
 
-2025-03-28 22:45:40,335 - ERROR - 测试用例 7.temperature above range 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:03,554 - ERROR - 测试用例 7.temperature above range 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 40004,
-  "message": "temperature\u503c\u8d85\u8fc75.0\uff0c\u964d\u4f4e\u5230\u22645.0\u6216\u4f7f\u7528\u9ed8\u8ba4\u503c"
+  "message": "temperature值超出范围[0.0,5.0], 调整至范围内或使用默认值",
+  "solution": [
+    "将temperature的值设置在[0.1, 5.0]范围内"
+  ]
 }
 
-2025-03-28 22:45:40,338 - ERROR - 测试用例 8.conflict attributes 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
-  "code": 40004,
-  "message": "temperature\u503c\u8d85\u8fc75.0\uff0c\u964d\u4f4e\u5230\u22645.0\u6216\u4f7f\u7528\u9ed8\u8ba4\u503c"
-}
-
-2025-03-28 22:45:40,529 - INFO - 测试用例 9.new attributes 的响应结果: {
+2025-03-29 22:36:03,677 - INFO - 测试用例 8.conflict attributes 的响应结果: {
   "code": 200,
   "data": {
     "adjustment_log": [
-      "\u5c5e\u6027 \u9ed1\u591c: \u521d\u59cb\u6743\u91cd 0.2, \u8bed\u4e49\u5f97\u5206 1.0, \u8c03\u6574\u540e\u6743\u91cd 0.04037930443882942",
-      "\u5c5e\u6027 \u8fdc\u53e4\u68ee\u6797: \u521d\u59cb\u6743\u91cd 0.7, \u8bed\u4e49\u5f97\u5206 0.9225516319274902, \u8c03\u6574\u540e\u6743\u91cd 0.12104757130146027"
+      "初始权重: 沙漠(0.7)→极光(0.5)",
+      "语义强化: 沙漠+-0.23（CLIP相似度1.00）",
+      "语义强化: 极光+-0.18（CLIP相似度0.98）"
+    ],
+    "conflict_report": {
+      "detected": true,
+      "potential_conflicts": [
+        [
+          "沙漠",
+          "极光"
+        ]
+      ]
+    },
+    "final_weights": {
+      "极光": 0.32488909363746643,
+      "沙漠": 0.4692240059375763
+    }
+  },
+  "debug_info": {
+    "gpu_utilization": 0,
+    "model_version": "v2.1",
+    "processing_time_ms": 120
+  }
+}
+
+2025-03-29 22:36:03,861 - INFO - 测试用例 9.new attributes 的响应结果: {
+  "code": 200,
+  "data": {
+    "adjustment_log": [
+      "初始权重: 黑夜(0.2)→远古森林(0.7)",
+      "语义强化: 黑夜+-0.16（CLIP相似度1.00）",
+      "语义强化: 远古森林+-0.58（CLIP相似度0.92）",
+      "冲突检测: 无显式冲突"
     ],
     "conflict_report": {
       "detected": false,
       "potential_conflicts": []
     },
     "final_weights": {
-      "\u8fdc\u53e4\u68ee\u6797": 0.12104757130146027,
-      "\u9ed1\u591c": 0.04037930443882942
+      "远古森林": 0.12104757130146027,
+      "黑夜": 0.04037930443882942
     }
   },
   "debug_info": {
     "gpu_utilization": 0,
     "model_version": "v2.1",
-    "processing_time_ms": 188
+    "processing_time_ms": 180
   }
 }
 
-2025-03-28 22:45:40,533 - ERROR - 测试用例 11.Out-of-range weights 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:03,864 - ERROR - 测试用例 11.Out-of-range weights 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 40003,
-  "message": "initial_weight\u8d85\u51fa[0.0,1.0]\u8303\u56f4\uff0c\u4f7f\u75280.5\u4f5c\u4e3a\u9ed8\u8ba4\u503c\u5e76\u91cd\u8bd5"
+  "message": "initial_weight超出[0.0,1.0]范围，使用0.5作为默认值并重试",
+  "solution": [
+    "将initial_weight的值设置在[0.0, 1.0]范围内"
+  ]
 }
 
-2025-03-28 22:45:40,535 - ERROR - 测试用例 12.lack attribution 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:03,867 - ERROR - 测试用例 12.lack attribution 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 40002,
-  "message": "attributes\u6570\u7ec4\u4e3a\u7a7a\uff0c\u81f3\u5c11\u63d0\u4f9b2\u4e2a\u5c5e\u6027\u5bf9\u8c61"
+  "message": "attributes数组为空，至少提供2个属性对象",
+  "solution": [
+    "在attributes数组中添加至少2个属性对象"
+  ]
 }
 
-2025-03-28 22:45:40,727 - INFO - 测试用例 13.wrong fallback_strategy 的响应结果: {
+2025-03-29 22:36:04,067 - INFO - 测试用例 13.wrong fallback_strategy 的响应结果: {
   "code": 200,
   "data": {
     "adjustment_log": [
-      "\u5c5e\u6027 \u8d5b\u535a\u670b\u514b: \u521d\u59cb\u6743\u91cd 0.7, \u8bed\u4e49\u5f97\u5206 1.0000001192092896, \u8c03\u6574\u540e\u6743\u91cd 0.14132758975028992",
-      "\u5c5e\u6027 \u9713\u8679\u706f\u5149: \u521d\u59cb\u6743\u91cd 0.5, \u8bed\u4e49\u5f97\u5206 0.9806764125823975, \u8c03\u6574\u540e\u6743\u91cd 0.09712132066488266"
+      "初始权重: 赛博朋克(0.7)→霓虹灯光(0.5)",
+      "语义强化: 赛博朋克+-0.56（CLIP相似度1.00）",
+      "语义强化: 霓虹灯光+-0.40（CLIP相似度0.98）",
+      "冲突检测: 无显式冲突"
     ],
     "conflict_report": {
       "detected": false,
       "potential_conflicts": []
     },
     "final_weights": {
-      "\u8d5b\u535a\u670b\u514b": 0.14132758975028992,
-      "\u9713\u8679\u706f\u5149": 0.09712132066488266
+      "赛博朋克": 0.14132758975028992,
+      "霓虹灯光": 0.09712132066488266
     }
   },
   "debug_info": {
     "gpu_utilization": 0,
     "model_version": "v2.1",
-    "processing_time_ms": 188
+    "processing_time_ms": 197
   }
 }
 
-2025-03-28 22:45:40,730 - ERROR - 测试用例 14.conflict with strict fallback_strategy 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:04,070 - ERROR - 测试用例 14.conflict with strict fallback_strategy 发送请求时出错: 422 Client Error: UNPROCESSABLE ENTITY for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+  "code": 42201,
+  "message": "显式冲突（如同时包含\"白天\"和\"夜晚\"）",
+  "solution": [
+    "移除冲突属性或切换降级策略"
+  ]
+}
+
+2025-03-29 22:36:04,073 - INFO - 测试用例 15.conflict attributes with balanced fallback_strategy 的响应结果: {
+  "code": 200,
+  "data": {
+    "adjustment_log": [
+      "属性 沙漠: 因冲突采用平衡策略，权重调整为 0.5",
+      "属性 极光: 因冲突采用平衡策略，权重调整为 0.5"
+    ],
+    "conflict_report": {
+      "detected": true,
+      "potential_conflicts": [
+        [
+          "沙漠",
+          "极光"
+        ]
+      ]
+    },
+    "final_weights": {
+      "极光": 0.5,
+      "沙漠": 0.5
+    }
+  },
+  "debug_info": {
+    "gpu_utilization": 0,
+    "model_version": "v2.1",
+    "processing_time_ms": 0
+  }
+}
+
+2025-03-29 22:36:04,075 - ERROR - 测试用例 19.empty json 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 40004,
-  "message": "temperature\u503c\u8d85\u8fc75.0\uff0c\u964d\u4f4e\u5230\u22645.0\u6216\u4f7f\u7528\u9ed8\u8ba4\u503c"
+  "message": "请求体不能为空",
+  "solution": [
+    "确保请求体包含有效的数据"
+  ]
 }
 
-2025-03-28 22:45:40,732 - ERROR - 测试用例 15.conflict attributes with balanced fallback_strategy 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
-  "code": 40004,
-  "message": "temperature\u503c\u8d85\u8fc75.0\uff0c\u964d\u4f4e\u5230\u22645.0\u6216\u4f7f\u7528\u9ed8\u8ba4\u503c"
+2025-03-29 22:36:04,078 - ERROR - 测试用例 20.worng type 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+  "code": 40005,
+  "message": "attribute的type字段必须为text、image或vector",
+  "solution": [
+    "将type字段的值设置为text、image或vector"
+  ]
 }
 
-2025-03-28 22:45:40,734 - ERROR - 测试用例 lack content-type 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:04,081 - ERROR - 测试用例 16.lack headers 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 400,
-  "message": "\u7f3a\u5c11X-Api-Key"
+  "message": "缺少X-Api-Key",
+  "solution": [
+    "在请求头中添加X-Api-Key字段并设置有效的值"
+  ]
 }
 
-2025-03-28 22:45:40,737 - ERROR - 测试用例 lack content-type 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:04,085 - ERROR - 测试用例 17.lack content-type 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 400,
-  "message": "\u7f3a\u5c11X-Api-Key"
+  "message": "base_prompt和attributes是必填参数",
+  "solution": [
+    "在请求体中添加base_prompt和attributes字段"
+  ]
 }
 
-2025-03-28 22:45:40,739 - ERROR - 测试用例 lack x-api-key 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
+2025-03-29 22:36:04,087 - ERROR - 测试用例 18.lack x-api-key 发送请求时出错: 400 Client Error: BAD REQUEST for url: http://127.0.0.1:5000/api/v5/weight/calculate Output: {
   "code": 400,
-  "message": "base_prompt\u548cattributes\u662f\u5fc5\u586b\u53c2\u6570"
+  "message": "缺少X-Api-Key",
+  "solution": [
+    "在请求头中添加X-Api-Key字段并设置有效的值"
+  ]
 }
 

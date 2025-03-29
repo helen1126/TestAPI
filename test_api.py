@@ -1,6 +1,6 @@
 import requests
 import json
-import logging
+import logging 
 
 # 配置日志记录
 logging.basicConfig(
@@ -49,9 +49,6 @@ standard_input = {
     },
 }
 
-
-
-
 def run_tests():
     try:
         # 从 examples.json 文件中读取测试用例
@@ -78,14 +75,12 @@ def run_tests():
                 )
     except FileNotFoundError:
         logging.error("未找到 examples.json 文件，请确保文件存在。")
-        print("未找到 examples.json 文件，请确保文件存在。")
     except KeyError:
         logging.error("examples.json 文件格式有误，请检查是否包含 'examples' 字段。")
-        print("examples.json 文件格式有误，请检查是否包含 'examples' 字段。")
 def other_examples():
     # 测试无请求头
 
-    info = "lack content-type"
+    info = "16.lack headers"
     try:
         # 发送 POST 请求
         response = requests.post(url, json=standard_input)
@@ -101,10 +96,10 @@ def other_examples():
 
     # 测试缺失content-type的请求头
 
-    info = "lack content-type"
+    info = "17.lack content-type"
     try:
         # 发送 POST 请求
-        response = requests.post(url, headers=wrong_headers_1, json=standard_input)
+        response = requests.post(url, headers=wrong_headers_2, json=standard_input)
         response.raise_for_status()
         result = response.json()
         logging.info(f"测试用例 {info} 的响应结果: {response.text}")
@@ -117,10 +112,10 @@ def other_examples():
 
     # 测试缺少x-api-key的请求头
 
-    info = "lack x-api-key"
+    info = "18.lack x-api-key"
     try:
         # 发送 POST 请求
-        response = requests.post(url, headers=wrong_headers_2, json=standard_input)
+        response = requests.post(url, headers=wrong_headers_1, json=standard_input)
         response.raise_for_status()
         result = response.json()
         logging.info(f"测试用例 {info} 的响应结果: {response.text}")
